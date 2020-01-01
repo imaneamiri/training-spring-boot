@@ -8,21 +8,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 
+
 @Entity
 //@JsonFilter("monFiltreDynamique")
+@ApiModel( value = "Le modèle d'un produit" , description = "Exemple de produit." )
 public class Product {
 
     @Id
     @GeneratedValue
+    @ApiParam(value = "L'identifiant du produit", required  =  true)
     private int id;
 
+    @ApiParam(value = "Le nom du produit. Le nom peut s'écrire entre 3 et 20 caractères.", required  =  true)
     @Length(min=3, max=20, message = "Nom trop long ou trop court. Et oui messages sont plus stylés que ceux de Spring")
     private String nom;
 
-    @Min(value = 1)
+    @ApiParam(value = "Le prix du produit à la vente", required  =  true)
     private int prix;
 
     //information que nous ne souhaitons pas exposer
+    @JsonIgnore
     private int prixAchat;
 
     //constructeur par défaut
@@ -35,6 +40,10 @@ public class Product {
         this.nom = nom;
         this.prix = prix;
         this.prixAchat = prixAchat;
+    }
+
+    public int getMarge() {
+        return prixAchat - prix;
     }
 
     public int getId() {
